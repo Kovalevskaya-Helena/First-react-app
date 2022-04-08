@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckboxGroup } from './common';
 import css from './styles.module.css';
 import { FILTER_STATUSES, filterOptions} from './constants';
+import { v4 as uuidv4 } from 'uuid';
 
 const filterTask = (filter, task) => {
   if (filter === FILTER_STATUSES.ALL) {
@@ -13,12 +14,6 @@ const filterTask = (filter, task) => {
   }
 
   return !task.isDone;
-}
-
-const generateUniqId = () => {
-  const id = Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15);
-  return id;
 }
 
 export class App extends React.Component {
@@ -40,9 +35,10 @@ export class App extends React.Component {
   inputChangeHandler=(event)=>{this.setState({taskInput:event.target.value})}
 
   addTaskHandler=()=>{
-    this.setState((prevState)=>({tasks:prevState.tasks.concat([{ id: generateUniqId(),  label: prevState.taskInput, isDone: false }
+    this.setState((prevState)=>({tasks:prevState.tasks.concat([{ id: uuidv4(),  label: prevState.taskInput, isDone: false }
     ])
   }))
+  this.setState({taskInput:''})
   }
   toggleCheckbox=(id)=>{
     this.setState((prevState)=>({tasks:prevState.tasks.map((task)=>{
@@ -52,8 +48,6 @@ export class App extends React.Component {
       return { ...task, isDone: !task.isDone };
     })}))
   }
-
-
 
   changeFilterHandler=(event)=>{this.setState({filter:event.target.value});}
 
