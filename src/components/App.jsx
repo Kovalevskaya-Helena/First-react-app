@@ -1,10 +1,9 @@
 import React from 'react';
 import { CheckboxGroup } from './common';
 import css from './styles.module.css';
-import { FILTER_STATUSES, filterOptions} from './constants';
-import { v4 as uuidv4 } from 'uuid';
+import { filterOptions} from './constants';
 import {connect} from 'react-redux'
-import {TASKS_ACTIONS, TasksSelectors, TasksActions} from '../store'
+import {TasksSelectors, TasksActions} from '../store'
 
 export class AppOriginal extends React.Component {
   state = {

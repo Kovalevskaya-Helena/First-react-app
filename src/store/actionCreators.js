@@ -15,6 +15,6 @@ export const toggleTasks = (id) => ({
 });
 
 export const changeFilter = (event) => ({
-  type: "CHANGE_FILTER",
+  type: TASKS_ACTIONS.CHANGE_FILTER,
   payload: event,
 });
