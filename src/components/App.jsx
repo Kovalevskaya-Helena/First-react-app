@@ -1,58 +1,37 @@
 import React from 'react';
 import { CheckboxGroup } from './common';
 import css from './styles.module.css';
-import { FILTER_STATUSES, filterOptions} from './constants';
-import { v4 as uuidv4 } from 'uuid';
+import { filterOptions} from './constants';
+import {connect} from 'react-redux'
+import {TasksSelectors, TasksActions} from '../store'
 
-const filterTask = (filter, task) => {
-  if (filter === FILTER_STATUSES.ALL) {
-    return true;
-  }
-
-  if (filter === FILTER_STATUSES.DONE) {
-    return task.isDone;
-  }
-
-  return !task.isDone;
-}
-
-export class App extends React.Component {
+export class AppOriginal extends React.Component {
   state = {
-    tasks: [
-  { id: 1, label: "Learn JS", isDone: true },
-  { id: 2, label: "Learn React", isDone: false },
-  { id: 3, label: "Learn Redux", isDone: false },
-  { id: 4, label: "Learn Typescript", isDone: false },
-    ],
     taskInput: '',
-    filter: FILTER_STATUSES.ALL,
   }
+
+  
 
   deleteTaskHandler=(id)=>{
-    this.setState((prevState)=>(
-      {tasks:prevState.tasks.filter(({id:taskId})=>taskId!==id)}))
+    this.props.deleteTasks(id);
   }
   inputChangeHandler=(event)=>{this.setState({taskInput:event.target.value})}
 
   addTaskHandler=()=>{
-    this.setState((prevState)=>({tasks:prevState.tasks.concat([{ id: uuidv4(),  label: prevState.taskInput, isDone: false }
-    ])
-  }))
+  this.props.addTasks({ label: this.state.taskInput, isDone: false });
   this.setState({taskInput:''})
   }
   toggleCheckbox=(id)=>{
-    this.setState((prevState)=>({tasks:prevState.tasks.map((task)=>{
-      if(task.id!==id){
-        return task
-      }
-      return { ...task, isDone: !task.isDone };
-    })}))
+    this.props.toggleTasks(id);
   }
 
-  changeFilterHandler=(event)=>{this.setState({filter:event.target.value});}
+  changeFilterHandler=(event)=>{this.props.changeFilter(event.target.value)}
+
 
   render(){
-    const { tasks, taskInput, filter } = this.state;
+    const {taskInput} = this.state;
+    const {tasks,filter}=this.props
+    console.log(this.props);
     return (
     <div className={css.wrapper}>
       <h1 className={css.header}>MY TODO</h1>
@@ -64,7 +43,7 @@ export class App extends React.Component {
         <CheckboxGroup options={filterOptions} value={filter} onChange={this.changeFilterHandler}/>
       </div>
       <ul>
-        {tasks.filter((task) => filterTask(filter, task)).map(({id, label, isDone }) => (
+        {tasks.map(({id, label, isDone }) => (
           <li className={css.todoitem} key={id}>
             <input className={css.checkbox} type="checkbox" checked={isDone} onChange={() => {
                 this.toggleCheckbox(id)
@@ -80,3 +59,20 @@ export class App extends React.Component {
     
   }
 }
+
+const mapStateToProps=(state)=>{
+  return {
+    tasks:TasksSelectors.getTasks(state),
+    filter:TasksSelectors.getFilters(state),
+  }
+}
+const mapDispatchToProps=(dispatch)=>{
+  return {
+    deleteTasks:(id)=>dispatch(TasksActions.deleteTasks(id)),
+    addTasks:(task)=>dispatch(TasksActions.addTasks(task)),
+    toggleTasks:(id)=>dispatch(TasksActions.toggleTasks(id)),
+    changeFilter: (event) => dispatch(TasksActions.changeFilter(event))
+
+  }
+}
+export const App = connect(mapStateToProps,mapDispatchToProps)(AppOriginal);
