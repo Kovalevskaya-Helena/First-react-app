@@ -45,7 +45,7 @@
 .checkbox:focus {
   outline: 0;
 }
-.button {
+.button, .link {
   display: inline-block;
   box-sizing: border-box;
   padding: 0 7px;
@@ -74,6 +74,8 @@
   outline: none;
   box-shadow: 0 0 0 4px #cbd6ee;
 }
+
+
 
 
 

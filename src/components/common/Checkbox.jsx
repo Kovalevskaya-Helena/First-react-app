@@ -12,7 +12,7 @@ export const CheckboxGroup = ({ value: groupValue, options, onChange }) => {
   return (
     <>
       {options.map(({ value, label }) =>
-          <Checkbox value={value} label={label} checked={value === groupValue} onChange={onChange} />)}
+          <Checkbox key={value} value={value} label={label} checked={value === groupValue} onChange={onChange} />)}
     </>
   )
 }
