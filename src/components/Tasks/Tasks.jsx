@@ -1,11 +1,13 @@
 import React from 'react';
-import { CheckboxGroup } from './common';
+import { CheckboxGroup } from '../common';
 import css from './styles.module.css';
 import { filterOptions} from './constants';
 import {connect} from 'react-redux'
-import {TasksSelectors, TasksActions} from '../store'
+import {TasksSelectors, TasksActions} from '../../store'
+import { compose } from "redux";
+import {withRouter,Link} from 'react-router-dom'
 
-export class AppOriginal extends React.Component {
+export class TasksOriginal extends React.Component {
   state = {
     taskInput: '',
   }
@@ -49,6 +51,7 @@ export class AppOriginal extends React.Component {
                 this.toggleCheckbox(id)
               }} />
             {label}
+            <Link className={css.link} to={`/task/${id}`}>Follow to link</Link>
             {isDone && <button className={css.button} onClick={()=>{this.deleteTaskHandler(id)}}>Delete</button>}
           </li>
         ))}
@@ -75,4 +78,5 @@ const mapDispatchToProps=(dispatch)=>{
 
   }
 }
-export const App = connect(mapStateToProps,mapDispatchToProps)(AppOriginal);
+export const Tasks = compose(withRouter,connect(mapStateToProps,mapDispatchToProps))(TasksOriginal);
+

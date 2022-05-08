@@ -18,3 +18,10 @@ export const changeFilter = (event) => ({
   type: TASKS_ACTIONS.CHANGE_FILTER,
   payload: event,
 });
+
+export const login = () => ({ type: TASKS_ACTIONS.LOGIN });
+export const loginout = () => ({ type: TASKS_ACTIONS.LOGOUT });
+export const addDescription = (text, id) => ({
+  type: TASKS_ACTIONS.ADD_DESCRIPTION,
+  payload: { id: id, text: text },
+});
