@@ -1,20 +1,25 @@
 
-import {withRouter} from 'react-router-dom'
-import { connect } from "react-redux";
-import { compose } from "redux";
+import {useParams} from 'react-router-dom'
+import {useSelector,useDispatch } from "react-redux";
 import {TasksSelectors,TasksActions} from '../../store'
 import css from './task.module.css';
 
-export const TaskOriginal=(props)=>{
+export const Task=()=>{
+
+const params = useParams();
+  const getByIdTask=useSelector((state)=>(id)=>TasksSelectors.getByIdTask(id)(state));
+  const dispatch=useDispatch;
+  const addDescriptionTask=(text,id)=>dispatch(TasksActions.addDescription(text,id));
+
 
  const textAreaHandler=(event)=>{
     const text=event.target.value;
-    const id=props.match.params.id
-    props.addDescriptionTask(text,id);
+    const id=params.id
+    addDescriptionTask(text,id);
   }
 
-  const {id}=props.match.params;
-  const task=props.getByIdTask(id);
+  const {id}=params;
+  const task=getByIdTask(id);
 
   if(!task){
     return <div>This task is not found!</div>}
@@ -27,16 +32,4 @@ export const TaskOriginal=(props)=>{
   )
 }
 
-const mapStateToProps=(state)=>{
-  return{
-    getByIdTask:(id)=>TasksSelectors.getByIdTask(id)(state),
-  }
-}
 
-const mapDispatchToProps=(dispatch)=>{
-  return{
-    addDescriptionTask:(text,id)=>dispatch(TasksActions.addDescription(text,id))
-  }
-}
-
-export const Task=compose(withRouter,connect(mapStateToProps,mapDispatchToProps))(TaskOriginal)
