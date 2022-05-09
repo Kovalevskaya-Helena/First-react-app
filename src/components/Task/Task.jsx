@@ -1,7 +1,7 @@
 
 import {useParams} from 'react-router-dom'
 import {useSelector,useDispatch } from "react-redux";
-import {TasksSelectors,TasksActions} from '../../store'
+import {TasksSelectors,TasksActionsTask} from '../../store'
 import css from './task.module.css';
 
 export const Task=()=>{
@@ -9,7 +9,7 @@ export const Task=()=>{
 const params = useParams();
   const getByIdTask=useSelector((state)=>(id)=>TasksSelectors.getByIdTask(id)(state));
   const dispatch=useDispatch;
-  const addDescriptionTask=(text,id)=>dispatch(TasksActions.addDescription(text,id));
+  const addDescriptionTask=(text,id)=>dispatch(TasksActionsTask.addDescription(text,id));
 
 
  const textAreaHandler=(event)=>{
